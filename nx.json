@@ -45,6 +45,11 @@
     "libsDir": "typescript",
     "appsDir": "typescript"
   },
+  "cli": {
+    "defaultCollection": "@nx/js",
+    "packageManager": "pnpm",
+    "analytics": false
+  },
   "affected": {
     "defaultBase": "main"
   },

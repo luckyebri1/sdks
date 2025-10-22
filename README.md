@@ -112,8 +112,14 @@ pnpm format
 # Clean build artifacts
 pnpm clean
 
-# Show dependency graph
-pnpm nx graph
+# View dependency graph in browser (no files created)
+pnpm graph:view
+
+# Generate dependency graph to file (saves to dist/graphs/)
+pnpm graph
+
+# Clean up generated graph files
+pnpm clean:graph
 
 # Work with affected packages only (useful for PRs)
 pnpm affected:build
