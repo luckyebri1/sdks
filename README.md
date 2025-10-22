@@ -1,6 +1,6 @@
 # @1inch/sdks - Multi-Language SDKs Monorepo
 
-This repository contains a collection of 1inch Protocol SDKs for various programming languages, managed with NX monorepo tooling.
+This repository contains a collection of 1inch Protocol SDKs, managed with NX monorepo tooling.
 
 ## 📁 Project Structure
 
@@ -31,66 +31,62 @@ pnpm install
 
 ## 📦 Available SDKs
 
-### TypeScript SDKs
+Each SDK is an independent package that can be used separately.
 
-#### @1inch/aqua-sdk
+### @1inch/aqua-sdk
 SDK for interacting with the 1inch Aqua Protocol.
 
 ```bash
-# Using npm scripts from root
-pnpm aqua:build     # Build the SDK
-pnpm aqua:test      # Run tests
-pnpm aqua:lint      # Run linter
+# Build
+pnpm aqua:build
 
-# Or using NX directly
-pnpm nx build aqua
-pnpm nx test aqua
-pnpm nx lint aqua
+# Test
+pnpm aqua:test
+
+# Lint
+pnpm aqua:lint
 ```
 
-#### @1inch/cross-chain-sdk
+### @1inch/cross-chain-sdk
 SDK for 1inch Cross-chain Protocol operations.
 
 ```bash
-# Using npm scripts from root
-pnpm cross-chain:build     # Build the SDK
-pnpm cross-chain:test      # Run tests
-pnpm cross-chain:lint      # Run linter
+# Build
+pnpm cross-chain:build
 
-# Or using NX directly
-pnpm nx build cross-chain
-pnpm nx test cross-chain
-pnpm nx lint cross-chain
+# Test
+pnpm cross-chain:test
+
+# Lint
+pnpm cross-chain:lint
 ```
 
-#### @1inch/fusion-sdk
+### @1inch/fusion-sdk
 SDK for 1inch Fusion Protocol operations.
 
 ```bash
-# Using npm scripts from root
-pnpm fusion:build     # Build the SDK
-pnpm fusion:test      # Run tests
-pnpm fusion:lint      # Run linter
+# Build
+pnpm fusion:build
 
-# Or using NX directly
-pnpm nx build fusion
-pnpm nx test fusion
-pnpm nx lint fusion
+# Test
+pnpm fusion:test
+
+# Lint
+pnpm fusion:lint
 ```
 
-#### @1inch/limit-order-sdk
+### @1inch/limit-order-sdk
 SDK for 1inch Limit Order Protocol operations.
 
 ```bash
-# Using npm scripts from root
-pnpm limit-order:build     # Build the SDK
-pnpm limit-order:test      # Run tests
-pnpm limit-order:lint      # Run linter
+# Build
+pnpm limit-order:build
 
-# Or using NX directly
-pnpm nx build limit-order
-pnpm nx test limit-order
-pnpm nx lint limit-order
+# Test
+pnpm limit-order:test
+
+# Lint
+pnpm limit-order:lint
 ```
 
 ## 🛠️ Development
@@ -98,107 +94,97 @@ pnpm nx lint limit-order
 ### Common Commands
 
 ```bash
-# Build all projects
+# Build all SDKs
 pnpm build
 
-# Run tests for all projects
+# Test all SDKs
 pnpm test
 
-# Lint all projects
+# Lint all SDKs
 pnpm lint
 
-# Type check all projects
+# Type check
 pnpm lint:types
-
-# Show dependency graph
-pnpm nx graph
-
-# Build affected projects only
-pnpm affected:build
-
-# Test affected projects only
-pnpm affected:test
-
-# Lint affected projects only
-pnpm affected:lint
 
 # Format code
 pnpm format
 
-# Check format
-pnpm format:check
-
-# Clean all build artifacts
+# Clean build artifacts
 pnpm clean
 
-# Reset NX cache
-pnpm reset
+# Show dependency graph
+pnpm nx graph
+
+# Work with affected packages only (useful for PRs)
+pnpm affected:build
+pnpm affected:test
+pnpm affected:lint
 ```
 
-### Working with NX
+### Individual SDK Development
 
-This monorepo uses NX for task orchestration and caching. Key features:
+Each SDK can be developed independently:
 
-- **Smart rebuilds**: Only rebuilds what has changed
-- **Task caching**: Caches build outputs for faster subsequent builds
-- **Dependency graph**: Visualize project dependencies with `pnpm nx graph`
-- **Affected commands**: Run tasks only for affected projects
+```bash
+# Navigate to SDK directory
+cd typescript/aqua
 
-### Individual Package Scripts
+# Install dependencies
+pnpm install
 
-Each SDK package also has its own npm scripts in `package.json` for:
-- `build` - Build ESM, CJS, and TypeScript types
-- `test` - Run Jest tests with SWC
-- `lint` - Run ESLint
-- `format` - Format with Prettier
-- `type-check` - TypeScript type checking
-- `clean` - Clean build artifacts
+# Build
+pnpm build
+
+# Run tests
+pnpm test
+
+# Type check
+pnpm type-check
+```
 
 ## 🚀 Release & Publishing
 
-### Releasing a New Version
+### Release Process
 
-To release a new version of an SDK:
+1. **Create a new release:**
+   - Go to GitHub Actions → "Release new version"
+   - Select the SDK to release
+   - Choose version bump type (patch, minor, major, prerelease)
 
-```bash
-# Through GitHub Actions (recommended)
-# Go to Actions → Release new version → Run workflow
-# Select the SDK and version bump type
-```
-
-### Publishing
-
-Publishing happens automatically after a release is created. The workflow will:
-1. Build the SDK
-2. Publish to GitHub Package Registry
-3. Optionally publish to NPM (if configured)
+2. **Automatic publishing:**
+   - The release workflow creates a version tag (e.g., `aqua-v1.0.0`)
+   - This triggers the publish workflow automatically
+   - The SDK is published to public NPM registry
 
 ### Manual Publishing
+
+If needed, you can publish manually:
 
 ```bash
 # Build the SDK
 pnpm nx build <sdk-name>
 
-# Navigate to the SDK directory
+# Navigate to SDK directory
 cd typescript/<sdk-name>
 
-# Publish
-pnpm publish dist --no-git-checks
+# Publish to NPM
+pnpm publish dist --access=public
 ```
+
+### Version Tags
+
+Each SDK has independent versioning with specific tag patterns:
+- `aqua-v*.*.*` - @1inch/aqua-sdk
+- `cross-chain-v*.*.*` - @1inch/cross-chain-sdk  
+- `fusion-v*.*.*` - @1inch/fusion-sdk
+- `limit-order-v*.*.*` - @1inch/limit-order-sdk
 
 ## 🔧 Configuration
 
-### ESLint
-
-This monorepo uses the standard `@1inch/eslint-config` for consistent code style across all SDKs.
-
-### TypeScript
-
-Uses `@1inch/tsconfig` as the base TypeScript configuration with ES2021 target.
-
-### Testing
-
-Jest with SWC for fast test execution.
+- **TypeScript**: Uses `@1inch/tsconfig` as base configuration
+- **ESLint**: Uses `@1inch/eslint-config` for code style
+- **Testing**: Jest with SWC for fast test execution
+- **Building**: SWC for fast TypeScript compilation
 
 ## 📝 License
 
