@@ -1,7 +1,13 @@
-import {encodeFunctionData, decodeFunctionResult, keccak256, Hash} from 'viem'
+import {encodeFunctionData, keccak256, decodeFunctionData} from 'viem'
 import {CallInfo, Address, HexString} from '@1inch/sdk-shared'
-import {AQUA_PROTOCOL_ABI} from './abi'
-import {ShipArgs, DockArgs, PullArgs, PushArgs} from './types'
+import {
+    ShipArgs,
+    DockArgs,
+    PullArgs,
+    PushArgs,
+    ShipDecodedResult
+} from './types'
+import AQUA_PROTOCOL_ABI from '../abi/Aqua.abi.json' with {type: 'json'}
 
 /**
  * Aqua Protocol Contract - Encoding/decoding for ship, dock, push, pull
@@ -19,7 +25,7 @@ export class AquaProtocolContract {
     static encodeShipCallData(args: ShipArgs): HexString {
         const {app, strategy, tokens, amounts} = args
 
-        const [result] = encodeFunctionData({
+        const result = encodeFunctionData({
             abi: AQUA_PROTOCOL_ABI,
             functionName: 'ship',
             args: [
@@ -34,18 +40,33 @@ export class AquaProtocolContract {
     }
 
     /**
-     * Decodes the result from a ship function call
-     * @param data - The encoded result data from the ship transaction
-     * @returns The strategy hash as a HexString
+     * Decodes ship function calldata
+     * @param data - The encoded calldata for ship function
+     * @returns Decoded function name and arguments
      */
-    static decodeShipResult(data: HexString): HexString {
-        const [result] = decodeFunctionResult({
+    static decodeShipResult(data: HexString): ShipDecodedResult {
+        const decoded = decodeFunctionData({
             abi: AQUA_PROTOCOL_ABI,
-            functionName: 'ship',
             data: data.toString()
-        }) as `0x${string}`
+        })
 
-        return new HexString(result)
+        const args = decoded.args as readonly [
+            string,
+            string,
+            readonly string[],
+            readonly bigint[]
+        ]
+        const [app, strategy, tokens, amounts] = args
+
+        return {
+            functionName: decoded.functionName,
+            decodedArgs: {
+                app: new Address(app),
+                strategy: new HexString(strategy),
+                tokens: tokens.map((t) => new Address(t)),
+                amounts: [...amounts]
+            }
+        }
     }
 
     /**
@@ -57,7 +78,7 @@ export class AquaProtocolContract {
     static encodeDockCallData(args: DockArgs): HexString {
         const {app, strategyHash, tokens} = args
 
-        const [result] = encodeFunctionData({
+        const result = encodeFunctionData({
             abi: AQUA_PROTOCOL_ABI,
             functionName: 'dock',
             args: [
@@ -79,7 +100,7 @@ export class AquaProtocolContract {
     static encodePullCallData(args: PullArgs): HexString {
         const {maker, strategyHash, token, amount, to} = args
 
-        const [result] = encodeFunctionData({
+        const result = encodeFunctionData({
             abi: AQUA_PROTOCOL_ABI,
             functionName: 'pull',
             args: [
@@ -103,7 +124,7 @@ export class AquaProtocolContract {
     static encodePushCallData(args: PushArgs): HexString {
         const {maker, app, strategyHash, token, amount} = args
 
-        const [result] = encodeFunctionData({
+        const result = encodeFunctionData({
             abi: AQUA_PROTOCOL_ABI,
             functionName: 'push',
             args: [
@@ -179,7 +200,7 @@ export class AquaProtocolContract {
      * @param strategy Strategy bytes
      * @returns Strategy hash
      */
-    static calculateStrategyHash(strategy: HexString): Hash {
-        return keccak256(strategy.toString())
+    static calculateStrategyHash(strategy: HexString): HexString {
+        return new HexString(keccak256(strategy.toString()))
     }
 }

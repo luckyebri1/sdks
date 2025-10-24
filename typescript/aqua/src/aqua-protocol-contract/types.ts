@@ -13,12 +13,18 @@ export type ShipArgs = {
 
 export type DockArgs = {
     app: Address
-    strategyHash: HexString // should be as keccak256(strategy)
+    /**
+     *  should be as keccak256(strategy)
+     */
+    strategyHash: HexString
     tokens: Address[]
 }
 
 export type PullArgs = {
     maker: Address
+    /**
+     *  should be as keccak256(strategy)
+     */
     strategyHash: HexString
     token: Address
     amount: bigint
@@ -28,7 +34,15 @@ export type PullArgs = {
 export type PushArgs = {
     maker: Address
     app: Address
-    strategyHash: HexString // should be as keccak256(strategy)
+    /**
+     *  should be as keccak256(strategy)
+     */
+    strategyHash: HexString
     token: Address
     amount: bigint
+}
+
+export type ShipDecodedResult = {
+    functionName: string
+    decodedArgs: ShipArgs
 }

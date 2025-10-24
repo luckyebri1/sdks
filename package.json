@@ -38,7 +38,6 @@
     "limit-order:test": "nx test limit-order",
     "limit-order:lint": "nx lint limit-order",
     "limit-order:lint:fix": "nx lint limit-order --fix",
-    
     "shared:build": "nx build shared",
     "shared:test": "nx test shared",
     "shared:lint": "nx lint shared",
