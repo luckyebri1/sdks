@@ -65,7 +65,7 @@ export class TakerTraits {
     }
 
     static default(): TakerTraits {
-        return new TakerTraits(0n, {})
+        return new TakerTraits(0n, {}).withExactIn()
     }
 
     /**
