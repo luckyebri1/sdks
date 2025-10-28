@@ -1,4 +1,3 @@
-import oneInchEslintConfig from '@1inch/eslint-config';
-import requireExtension from './eslint/require-extension.mjs';
+import oneInchEslintConfig from '@1inch/eslint-config'
 
-export default [...oneInchEslintConfig, requireExtension.configs.recommended];
+export default [...oneInchEslintConfig]
