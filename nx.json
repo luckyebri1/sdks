@@ -73,5 +73,25 @@
         "testTargetName": "test"
       }
     }
-  ]
+  ],
+  "release": {
+    "changelog": {
+      "projectChangelogs": {
+        "file": false,
+        "createRelease": "github"
+      }
+    },
+    "groups": {
+      "typescript": {
+        "projects": ["typescript/*"],
+        "projectsRelationship": "independent"
+      }
+    },
+    "releaseTag": {
+      "pattern": "release/{projectName}/{version}"
+    },
+    "git": {
+      "commitMessage": "chore(release): {version}"
+    }
+  }
 }
